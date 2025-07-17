@@ -1,12 +1,9 @@
-# Build stage
-FROM golang:1.24 as builder
+FROM golang:1.24
+
 WORKDIR /app
 COPY . .
-RUN GOOS=linux GOARCH=amd64 go build -o main .
 
-# Run stage
-FROM alpine
-WORKDIR /app
-COPY --from=builder /app/main .
+RUN go mod download
+
 EXPOSE 8080
-CMD ["./main"]
+CMD ["go", "run", "."]
